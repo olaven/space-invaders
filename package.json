@@ -1,0 +1,12 @@
+{
+  "name": "space-invaders",
+  "version": "1.0.0",
+  "description": "Implementation of space invaders in P5 ",
+  "main": "sketch.js ",
+  "repository": "https://github.com/olaven/space-invaders.git",
+  "author": "olaven <olavsundfoer@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "nodemon": "^1.17.5"
+  }
+}
