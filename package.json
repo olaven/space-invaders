@@ -2,9 +2,17 @@
   "name": "space-invaders",
   "version": "1.0.0",
   "description": "Implementation of space invaders in P5 ",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"browser-sync start --server -w\" \" tsc --watch\""
+  },
   "main": "sketch.js ",
   "repository": "https://github.com/olaven/space-invaders.git",
   "author": "olaven <olavsundfoer@gmail.com>",
   "license": "MIT",
-  "dependencies": {}
+  "devDependencies": {
+    "browser-sync": "^2.24.4",
+    "concurrently": "^3.5.1",
+    "typescript": "^2.8.3"
+  }
 }
