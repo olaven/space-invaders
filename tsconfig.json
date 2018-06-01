@@ -16,5 +16,5 @@
         "rootDir": "./sketch/",
         "sourceMap": true,
         "noImplicitAny": true
-      }
+    }
 }

@@ -9,10 +9,10 @@
 let adjustPosition = (p : p5, character : Character) => 
 {
     /* 
-        Bruk skjermstørrelsen character er justert til. 
-        Finn nåværende forhold. 
-        Bruk det forhodlet til å sette, med nåværende størrelse 
-        Forny størrelsen character er justert til. 
+    * Bruk skjermstørrelsen character er justert til. 
+    * Finn nåværende forhold. 
+    * Bruk det forhodlet til å sette, med nåværende størrelse 
+    * Forny størrelsen character er justert til. 
     */
     let changeInScreenSize = 
     {

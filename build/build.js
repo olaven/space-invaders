@@ -14,7 +14,7 @@ var sketch = function (p) {
     p.setup = function () {
         p.createCanvas(p.windowWidth, p.windowHeight);
         player = new Player(p, 200, 200, 40, 5);
-        aliens = createAliens(2, 10);
+        aliens = createAliens(20, 5);
     };
     p.windowResized = function () {
         p.resizeCanvas(p.windowWidth, p.windowHeight);
@@ -27,6 +27,10 @@ var sketch = function (p) {
         p.keyPressed = function () {
             handleKeyPress(p);
         };
+        p.push();
+        p.fill(100, 200, 100);
+        p.rect(400, 400, 400, 400);
+        p.pop();
         player.render(p);
         for (var _i = 0, aliens_1 = aliens; _i < aliens_1.length; _i++) {
             var alien = aliens_1[_i];
@@ -34,11 +38,16 @@ var sketch = function (p) {
         }
     };
     var createAliens = function (rows, columns) {
+        var parts = {
+            x: p.windowWidth / rows,
+            y: p.windowHeight / columns
+        };
+        console.log(p.windowWidth / 2);
         for (var i = 0; i < rows; i++) {
-            for (var x = 0; x < columns; x++) {
-                var actualX = -1;
-                var actualY = -1;
-                aliens.push(new Alien(p, i, x, 10, 100));
+            for (var j = 0; j < columns; j++) {
+                var actualX = parts.x * i;
+                var actualY = parts.y * j;
+                aliens.push(new Alien(p, actualX, actualY, 10, 100));
             }
         }
         return aliens;
@@ -105,6 +114,14 @@ var Player = (function (_super) {
     };
     return Player;
 }(Character));
+var Projectile = (function () {
+    function Projectile(x, y, speed, color) {
+        render();
+        {
+        }
+    }
+    return Projectile;
+}());
 var adjustPosition = function (p, character) {
     var changeInScreenSize = {
         x: p.windowWidth / character.screenSize.x,
@@ -117,6 +134,12 @@ var adjustPosition = function (p, character) {
             x: p.windowWidth,
             y: p.windowHeight
         };
+};
+var isRectColliding = function (first, second) {
+    if (first.left > second.left && first.right < second.right && first.top < second.top && first.bottom > second.bottom) {
+        return true;
+    }
+    return false;
 };
 var keys = {
     UP_ARROW: 38,
