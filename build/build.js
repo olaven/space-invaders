@@ -9,7 +9,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var player;
-var aliens;
+var aliens = [];
 var sketch = function (p) {
     p.setup = function () {
         p.createCanvas(p.windowWidth, p.windowHeight);
@@ -26,11 +26,15 @@ var sketch = function (p) {
             handleKeyPress(p);
         };
         player.render(p);
+        for (var _i = 0, aliens_1 = aliens; _i < aliens_1.length; _i++) {
+            var alien = aliens_1[_i];
+            alien.render(p);
+        }
     };
     var createAliens = function (rows, columns) {
         for (var i = 0; i < rows; i++) {
             for (var x = 0; x < columns; x++) {
-                aliens[i].push(new Alien(p, i, x, 10, 100));
+                aliens.push(new Alien(p, i, x, 10, 100));
             }
         }
         return aliens;
@@ -96,7 +100,7 @@ var keys = {
     DOWN_ARROW: 40,
     LEFT_ARROW: 37,
     RIGHT_ARROW: 39,
-    ENTER: 13
+    SPACE: 32
 };
 var handleKeyDown = function (p) {
     if (p.keyIsDown(keys.UP_ARROW)) {
@@ -113,7 +117,7 @@ var handleKeyDown = function (p) {
     }
 };
 var handleKeyPress = function (p) {
-    if (p.keyIsDown(keys.ENTER)) {
+    if (p.keyIsDown(keys.SPACE)) {
         player.shoot();
     }
 };

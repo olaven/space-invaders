@@ -4,7 +4,7 @@ const keys =
     DOWN_ARROW : 40, 
     LEFT_ARROW : 37, 
     RIGHT_ARROW: 39, 
-    ENTER : 13
+    SPACE:  32
 }
 
 /**
@@ -32,7 +32,7 @@ const handleKeyDown = (p: p5) => {
 const handleKeyPress = (p : p5) => 
 {
     // player actions 
-    if(p.keyIsDown(keys.ENTER))
+    if(p.keyIsDown(keys.SPACE))
     {
         player.shoot(); 
     }

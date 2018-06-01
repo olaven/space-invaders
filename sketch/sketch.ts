@@ -1,5 +1,5 @@
 let player : Player; 
-let aliens : [Alien[]]; 
+let aliens : Alien[] = []; 
 
 const sketch = (p: p5) => {
 
@@ -25,6 +25,11 @@ const sketch = (p: p5) => {
         }
 
         player.render(p);
+
+        for(let alien of aliens)
+        {
+            alien.render(p); 
+        }
     }
 
     /**
@@ -36,7 +41,7 @@ const sketch = (p: p5) => {
         {
             for(let x = 0; x < columns; x++)
             {
-                aliens[i].push(new Alien(p, i, x, 10, 100)); 
+                aliens.push(new Alien(p, i, x, 10, 100));
             }
         }
         return aliens; 
