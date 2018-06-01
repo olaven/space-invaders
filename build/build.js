@@ -18,6 +18,8 @@ var sketch = function (p) {
     };
     p.windowResized = function () {
         p.resizeCanvas(p.windowWidth, p.windowHeight);
+        adjustPosition(p, player);
+        aliens.forEach(function (alien) { adjustPosition(p, alien); });
     };
     p.draw = function () {
         p.background(150, 100, 200);
@@ -34,6 +36,8 @@ var sketch = function (p) {
     var createAliens = function (rows, columns) {
         for (var i = 0; i < rows; i++) {
             for (var x = 0; x < columns; x++) {
+                var actualX = -1;
+                var actualY = -1;
                 aliens.push(new Alien(p, i, x, 10, 100));
             }
         }
@@ -61,12 +65,22 @@ var Character = (function () {
         this.size = size;
         this.speed = speed;
         this.position = p.createVector(x, y);
+        this.screenSize = {
+            x: p.windowWidth,
+            y: p.windowHeight
+        };
     }
     Character.prototype.render = function (p) {
         p.push();
         p.fill("white");
         p.rect(this.position.x, this.position.y, this.size, this.size * 0.66);
         p.pop();
+    };
+    Character.prototype.setX = function (x) {
+        this.position.x = x;
+    };
+    Character.prototype.setY = function (y) {
+        this.position.y = y;
     };
     return Character;
 }());
@@ -91,9 +105,18 @@ var Player = (function (_super) {
     };
     return Player;
 }(Character));
-var createArrayOf = function (type, amount) {
-    if (!amount)
-        amount = 1;
+var adjustPosition = function (p, character) {
+    var changeInScreenSize = {
+        x: p.windowWidth / character.screenSize.x,
+        y: p.windowHeight / character.screenSize.y,
+    };
+    character.setX(character.position.x * changeInScreenSize.x);
+    character.setY(character.position.y * changeInScreenSize.y);
+    character.screenSize =
+        {
+            x: p.windowWidth,
+            y: p.windowHeight
+        };
 };
 var keys = {
     UP_ARROW: 38,

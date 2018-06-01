@@ -13,6 +13,10 @@ const sketch = (p: p5) => {
     
     p.windowResized = () => {
         p.resizeCanvas(p.windowWidth, p.windowHeight);
+
+        //adjusting positions to keep same relationship
+        adjustPosition(p, player); 
+        aliens.forEach(alien => {adjustPosition(p, alien)})
     }
     
     // DRAWING 
@@ -41,6 +45,9 @@ const sketch = (p: p5) => {
         {
             for(let x = 0; x < columns; x++)
             {
+                // adjusted for screensize; 
+                let actualX = -1; 
+                let actualY = -1; 
                 aliens.push(new Alien(p, i, x, 10, 100));
             }
         }
