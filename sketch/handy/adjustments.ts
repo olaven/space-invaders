@@ -14,7 +14,7 @@ let adjustPosition = (p : p5, character : Character) =>
     * Bruk det forhodlet til å sette, med nåværende størrelse 
     * Forny størrelsen character er justert til. 
     */
-    let changeInScreenSize = 
+    let changeInScreenSize =   
     {
         x : p.windowWidth / character.screenSize.x, 
         y: p.windowHeight / character.screenSize.y,         
