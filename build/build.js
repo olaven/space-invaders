@@ -14,7 +14,7 @@ var projectiles = [];
 var sketch = function (p) {
     p.setup = function () {
         p.createCanvas(p.windowWidth, p.windowHeight);
-        player = new Player(p, 200, 200, { x: 40, y: 30 }, 5);
+        player = new Player(p, { x: 200, y: 200 }, { x: 40, y: 30 }, 5);
         aliens = createAliens(20, 5);
     };
     p.windowResized = function () {
@@ -29,29 +29,15 @@ var sketch = function (p) {
             handleKeyPress(p);
         };
         player.render(p);
-        var _loop_1 = function (projectile) {
-            if (isRectColliding({
-                top: projectile.position.y + projectile.size.y,
-                bottom: projectile.position.y,
-                left: projectile.position.x,
-                right: projectile.position.x + projectile.size.x
-            }, {
-                top: 0,
-                bottom: p.windowHeight,
-                left: 0,
-                right: p.windowWidth
-            })) {
-                projectiles = projectiles.filter(function (p) { return p !== projectile; });
-            }
-            projectile.render(p);
-            projectile.move(p);
-        };
         for (var _i = 0, projectiles_1 = projectiles; _i < projectiles_1.length; _i++) {
             var projectile = projectiles_1[_i];
-            _loop_1(projectile);
+            cleanFromArray(projectile, projectiles, p);
+            projectile.render(p);
+            projectile.move(p);
         }
         for (var _a = 0, aliens_1 = aliens; _a < aliens_1.length; _a++) {
             var alien = aliens_1[_a];
+            cleanFromArray(alien, aliens, p);
             alien.render(p);
         }
     };
@@ -64,7 +50,7 @@ var sketch = function (p) {
             for (var j = 0; j < rows; j++) {
                 var actualX = parts.x * i;
                 var actualY = parts.y * j;
-                aliens.push(new Alien(p, actualX, actualY, { x: 10, y: 20 }, 100));
+                aliens.push(new Alien(p, { x: actualX, y: actualY }, { x: 10, y: 15 }, 100));
             }
         }
         return aliens;
@@ -72,7 +58,7 @@ var sketch = function (p) {
 };
 var sketchP = new p5(sketch);
 var Character = (function () {
-    function Character(p, x, y, size, speed) {
+    function Character(p, position, size, speed) {
         var _this = this;
         this.move = {
             up: function () {
@@ -90,7 +76,7 @@ var Character = (function () {
         };
         this.size = size;
         this.speed = speed;
-        this.position = p.createVector(x, y);
+        this.position = position;
         this.screenSize = {
             x: p.windowWidth,
             y: p.windowHeight
@@ -112,8 +98,8 @@ var Character = (function () {
 }());
 var Alien = (function (_super) {
     __extends(Alien, _super);
-    function Alien(p, x, y, size, speed) {
-        var _this = _super.call(this, p, x, y, size, speed) || this;
+    function Alien(p, position, size, speed) {
+        var _this = _super.call(this, p, position, size, speed) || this;
         _this.speed = speed;
         return _this;
     }
@@ -121,8 +107,8 @@ var Alien = (function (_super) {
 }(Character));
 var Player = (function (_super) {
     __extends(Player, _super);
-    function Player(p, x, y, size, speed) {
-        var _this = _super.call(this, p, x, y, size, speed) || this;
+    function Player(p, position, size, speed) {
+        var _this = _super.call(this, p, position, size, speed) || this;
         _this.speed = speed;
         return _this;
     }
@@ -142,7 +128,6 @@ var Projectile = (function () {
         p.pop();
     };
     Projectile.prototype.move = function (p) {
-        console.log(this.size.x, " - ", this.size.y);
         switch (this.direction) {
             case Direction.UP:
                 this.position.y -= 1 * this.speed;
@@ -173,6 +158,11 @@ var adjustPosition = function (p, character) {
             x: p.windowWidth,
             y: p.windowHeight
         };
+};
+var cleanFromArray = function (element, array, p) {
+    if (element.position.x < 0 || element.position.x > p.windowWidth || element.position.y < 0 || element.position.y > p.windowHeight) {
+        array.splice(array.indexOf(element), 1);
+    }
 };
 var isRectColliding = function (first, second) {
     if (first.left > second.left && first.right < second.right && first.top < second.top && first.bottom > second.bottom) {

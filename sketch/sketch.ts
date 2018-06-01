@@ -8,7 +8,7 @@ const sketch = (p: p5) => {
     p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight);
 
-        player = new Player(p, 200, 200, {x : 40, y : 30}, 5); 
+        player = new Player(p, {x : 200, y : 200}, {x : 40, y : 30}, 5); 
         aliens = createAliens(20, 5); 
     }
     
@@ -25,7 +25,6 @@ const sketch = (p: p5) => {
         p.background(150, 100, 200);
 
 
-
         handleKeyDown(p);
         p.keyPressed = () => {
             handleKeyPress(p); 
@@ -34,30 +33,14 @@ const sketch = (p: p5) => {
         player.render(p);
 
         for (let projectile of projectiles) {
-            if(isRectColliding(
-                {
-                    top    : projectile.position.y + projectile.size.y, 
-                    bottom : projectile.position.y, 
-                    left   : projectile.position.x, 
-                    right  : projectile.position.x + projectile.size.x
-                }, 
-                {
-                    top    : 0, 
-                    bottom : p.windowHeight, 
-                    left   : 0, 
-                    right  : p.windowWidth
-                }
-            ))
-            {
-                projectiles = projectiles.filter(p => p !== projectile); 
-            }
-
+            cleanFromArray(projectile, projectiles, p); 
             projectile.render(p);
             projectile.move(p);
         }
 
         for(let alien of aliens)
         {
+            cleanFromArray(alien, aliens, p); 
             alien.render(p); 
         }
 
@@ -85,7 +68,7 @@ const sketch = (p: p5) => {
                 let actualX = parts.x * i;  
                 let actualY = parts.y * j; 
                 
-                aliens.push(new Alien(p, actualX, actualY, {x : 10, y: 20}, 100));
+                aliens.push(new Alien(p, {x : actualX, y: actualY}, {x : 10, y:15}, 100));
             }
         }
         return aliens; 

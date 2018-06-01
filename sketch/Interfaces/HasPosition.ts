@@ -1,5 +1,4 @@
-interface HasSize
-{
+interface HasPosition {
     // used in cleanup of elements if they are off screen 
-    size : Size; 
+    position: ElementPosition;
 }

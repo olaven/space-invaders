@@ -29,7 +29,6 @@ class Projectile implements HasSize
     }
     move(p : p5)
     {
-        console.log(this.size.x, " - ", this.size.y); 
         // REFACTOR THIS TOGETHER WITH CHARACTER MOVEMENT
         switch(this.direction)
         {

@@ -29,3 +29,15 @@ let adjustPosition = (p : p5, character : Character) =>
         y : p.windowHeight
     }
 }
+
+
+/**
+ * Clean the array of any element with position outside of screen
+ */
+let cleanFromArray = (element : HasSize & HasPosition, array : HasSize[], p : p5) => 
+{
+    if (element.position.x < 0 || element.position.x > p.windowWidth || element.position.y < 0 || element.position.y > p.windowHeight)
+    {
+        array.splice(array.indexOf(element), 1); 
+    }
+}

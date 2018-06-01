@@ -3,7 +3,7 @@
  * @method render renders on canvas 
  */
 abstract class Character implements CanMove, HasSize{
-    public position: p5.Vector; 
+    public position: ElementPosition; 
     public screenSize : {x : number, y : number}; // the screen size that the Character relates to. Used for adjustments
     public size : Size; 
     public speed: number;
@@ -26,10 +26,10 @@ abstract class Character implements CanMove, HasSize{
             }
         }
 
-    constructor(p : p5, x : number, y : number, size : Size, speed : number) {
+    constructor(p : p5, position : ElementPosition, size : Size, speed : number) {
         this.size = size;
         this.speed = speed; 
-        this.position = p.createVector(x, y); 
+        this.position = position; 
         this.screenSize = {
             x : p.windowWidth, 
             y : p.windowHeight
