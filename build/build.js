@@ -14,10 +14,12 @@ var sketch = function (p) {
     p.setup = function () {
         p.createCanvas(p.windowWidth, p.windowHeight);
         player = new Player(p, 200, 200, 40, 5);
-        aliens = createAliens(2, 10);
+        aliens = createAliens(20, 5);
     };
     p.windowResized = function () {
         p.resizeCanvas(p.windowWidth, p.windowHeight);
+        adjustPosition(p, player);
+        aliens.forEach(function (alien) { adjustPosition(p, alien); });
     };
     p.draw = function () {
         p.background(150, 100, 200);
@@ -25,6 +27,10 @@ var sketch = function (p) {
         p.keyPressed = function () {
             handleKeyPress(p);
         };
+        p.push();
+        p.fill(100, 200, 100);
+        p.rect(400, 400, 400, 400);
+        p.pop();
         player.render(p);
         for (var _i = 0, aliens_1 = aliens; _i < aliens_1.length; _i++) {
             var alien = aliens_1[_i];
@@ -32,9 +38,16 @@ var sketch = function (p) {
         }
     };
     var createAliens = function (rows, columns) {
+        var parts = {
+            x: p.windowWidth / rows,
+            y: p.windowHeight / columns
+        };
+        console.log(p.windowWidth / 2);
         for (var i = 0; i < rows; i++) {
-            for (var x = 0; x < columns; x++) {
-                aliens.push(new Alien(p, i, x, 10, 100));
+            for (var j = 0; j < columns; j++) {
+                var actualX = parts.x * i;
+                var actualY = parts.y * j;
+                aliens.push(new Alien(p, actualX, actualY, 10, 100));
             }
         }
         return aliens;
@@ -61,12 +74,22 @@ var Character = (function () {
         this.size = size;
         this.speed = speed;
         this.position = p.createVector(x, y);
+        this.screenSize = {
+            x: p.windowWidth,
+            y: p.windowHeight
+        };
     }
     Character.prototype.render = function (p) {
         p.push();
         p.fill("white");
         p.rect(this.position.x, this.position.y, this.size, this.size * 0.66);
         p.pop();
+    };
+    Character.prototype.setX = function (x) {
+        this.position.x = x;
+    };
+    Character.prototype.setY = function (y) {
+        this.position.y = y;
     };
     return Character;
 }());
@@ -91,9 +114,32 @@ var Player = (function (_super) {
     };
     return Player;
 }(Character));
-var createArrayOf = function (type, amount) {
-    if (!amount)
-        amount = 1;
+var Projectile = (function () {
+    function Projectile(x, y, speed, color) {
+        render();
+        {
+        }
+    }
+    return Projectile;
+}());
+var adjustPosition = function (p, character) {
+    var changeInScreenSize = {
+        x: p.windowWidth / character.screenSize.x,
+        y: p.windowHeight / character.screenSize.y,
+    };
+    character.setX(character.position.x * changeInScreenSize.x);
+    character.setY(character.position.y * changeInScreenSize.y);
+    character.screenSize =
+        {
+            x: p.windowWidth,
+            y: p.windowHeight
+        };
+};
+var isRectColliding = function (first, second) {
+    if (first.left > second.left && first.right < second.right && first.top < second.top && first.bottom > second.bottom) {
+        return true;
+    }
+    return false;
 };
 var keys = {
     UP_ARROW: 38,

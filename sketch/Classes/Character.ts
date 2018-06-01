@@ -3,8 +3,9 @@
  * @method render renders on canvas 
  */
 abstract class Character {
+    public position: p5.Vector; 
+    public screenSize : {x : number, y : number}; // the screen size that the Character relates to. Used for adjustments
     protected size : number; 
-    protected position : p5.Vector; 
     protected speed: number;
     /**
      *  Methods for moving the character 
@@ -28,9 +29,18 @@ abstract class Character {
     constructor(p : p5, x : number, y : number, size : number, speed : number) {
         this.size = size;
         this.speed = speed; 
-        this.position = p.createVector(x, y)
+        this.position = p.createVector(x, y); 
+        this.screenSize = {
+            x : p.windowWidth, 
+            y : p.windowHeight
+        }
     }
 
+    /**
+     * 
+     * @param p the p5 context 
+     * Renders the Character
+     */
     render(p : p5) {
         p.push();
 
@@ -38,6 +48,24 @@ abstract class Character {
         p.rect(this.position.x, this.position.y, this.size, this.size * 0.66);
 
         p.pop();
+    }
+
+    /**
+     * 
+     * @param x new x value 
+     * change position
+     */
+    setX(x: number) {
+        this.position.x = x;
+    }
+
+    /**
+     * 
+     * @param y new y value 
+     * change position
+     */
+    setY(y: number) {
+        this.position.y = y; 
     }
 }
 
