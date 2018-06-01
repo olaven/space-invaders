@@ -1,5 +1,6 @@
 let player : Player; 
 let aliens : Alien[] = []; 
+let projectiles : Projectile[] = []; 
 
 const sketch = (p: p5) => {
 
@@ -7,7 +8,7 @@ const sketch = (p: p5) => {
     p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight);
 
-        player = new Player(p, 200, 200, 40, 5); 
+        player = new Player(p, 200, 200, {x : 40, y : 30}, 5); 
         aliens = createAliens(20, 5); 
     }
     
@@ -23,19 +24,37 @@ const sketch = (p: p5) => {
     p.draw = () => {
         p.background(150, 100, 200);
 
-        
+
 
         handleKeyDown(p);
         p.keyPressed = () => {
             handleKeyPress(p); 
         }
 
-        p.push();
-        p.fill(100, 200, 100);
-        p.rect(400, 400, 400, 400);
-        p.pop(); 
-        
         player.render(p);
+
+        for (let projectile of projectiles) {
+            if(isRectColliding(
+                {
+                    top    : projectile.position.y + projectile.size.y, 
+                    bottom : projectile.position.y, 
+                    left   : projectile.position.x, 
+                    right  : projectile.position.x + projectile.size.x
+                }, 
+                {
+                    top    : 0, 
+                    bottom : p.windowHeight, 
+                    left   : 0, 
+                    right  : p.windowWidth
+                }
+            ))
+            {
+                projectiles = projectiles.filter(p => p !== projectile); 
+            }
+
+            projectile.render(p);
+            projectile.move(p);
+        }
 
         for(let alien of aliens)
         {
@@ -47,28 +66,26 @@ const sketch = (p: p5) => {
     /**
      * Returns two-dimensional array of aliens 
      */
-    let createAliens = (rows : number, columns : number) => 
+    let createAliens = (columns : number, rows : number) => 
     {
         /**
          * I imagine splicing the space into "parts".
          * Each alien is placed in a part  
          */
         let parts = {
-            x : p.windowWidth / rows, 
-            y : p.windowHeight / columns
+            x : p.windowWidth / columns, 
+            y : p.windowHeight / rows
         }; 
-
-        console.log(p.windowWidth / 2); 
         
-        for(let i = 0; i < rows; i++)
+        for(let i = 0; i < columns; i++)
         {
-            for(let j = 0; j < columns; j++)
+            for(let j = 0; j < rows; j++)
             {
                 // adjusted for screensize; 
                 let actualX = parts.x * i;  
                 let actualY = parts.y * j; 
                 
-                aliens.push(new Alien(p, actualX, actualY, 10, 100));
+                aliens.push(new Alien(p, actualX, actualY, {x : 10, y: 20}, 100));
             }
         }
         return aliens; 
@@ -78,6 +95,4 @@ const sketch = (p: p5) => {
 
 
 var sketchP = new p5(sketch);
-
-
 

@@ -6,7 +6,7 @@
 /**
  * returns true if first rect is colliding with second rect
  */
-let isRectColliding = (first : RectangleBorders, second : RectangleBorders) => //THIS METHOD IS FLAWED: What if first is partially colliding, not consumed? 
+const isRectColliding = (first : RectangleBorders, second : RectangleBorders) => //THIS METHOD IS FLAWED: Checks if inside, not if colliding 
 {
     // inside horizontally                                      inside vertically 
     if(first.left > second.left && first.right < second.right && first.top < second.top && first.bottom > second.bottom)
@@ -15,6 +15,8 @@ let isRectColliding = (first : RectangleBorders, second : RectangleBorders) => /
     }
     return false; 
 }
+
+
 
 /**
  * Borders of a rectangle 

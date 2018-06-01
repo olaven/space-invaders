@@ -2,11 +2,11 @@
  * Superclass for all characters on screen. 
  * @method render renders on canvas 
  */
-abstract class Character {
+abstract class Character implements CanMove, HasSize{
     public position: p5.Vector; 
     public screenSize : {x : number, y : number}; // the screen size that the Character relates to. Used for adjustments
-    protected size : number; 
-    protected speed: number;
+    public size : Size; 
+    public speed: number;
     /**
      *  Methods for moving the character 
      */
@@ -26,7 +26,7 @@ abstract class Character {
             }
         }
 
-    constructor(p : p5, x : number, y : number, size : number, speed : number) {
+    constructor(p : p5, x : number, y : number, size : Size, speed : number) {
         this.size = size;
         this.speed = speed; 
         this.position = p.createVector(x, y); 
@@ -45,7 +45,7 @@ abstract class Character {
         p.push();
 
         p.fill("white")
-        p.rect(this.position.x, this.position.y, this.size, this.size * 0.66);
+        p.rect(this.position.x, this.position.y, this.size.x, this.size.y * 0.66);
 
         p.pop();
     }

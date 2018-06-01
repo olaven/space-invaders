@@ -10,10 +10,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var player;
 var aliens = [];
+var projectiles = [];
 var sketch = function (p) {
     p.setup = function () {
         p.createCanvas(p.windowWidth, p.windowHeight);
-        player = new Player(p, 200, 200, 40, 5);
+        player = new Player(p, 200, 200, { x: 40, y: 30 }, 5);
         aliens = createAliens(20, 5);
     };
     p.windowResized = function () {
@@ -27,27 +28,43 @@ var sketch = function (p) {
         p.keyPressed = function () {
             handleKeyPress(p);
         };
-        p.push();
-        p.fill(100, 200, 100);
-        p.rect(400, 400, 400, 400);
-        p.pop();
         player.render(p);
-        for (var _i = 0, aliens_1 = aliens; _i < aliens_1.length; _i++) {
-            var alien = aliens_1[_i];
+        var _loop_1 = function (projectile) {
+            if (isRectColliding({
+                top: projectile.position.y + projectile.size.y,
+                bottom: projectile.position.y,
+                left: projectile.position.x,
+                right: projectile.position.x + projectile.size.x
+            }, {
+                top: 0,
+                bottom: p.windowHeight,
+                left: 0,
+                right: p.windowWidth
+            })) {
+                projectiles = projectiles.filter(function (p) { return p !== projectile; });
+            }
+            projectile.render(p);
+            projectile.move(p);
+        };
+        for (var _i = 0, projectiles_1 = projectiles; _i < projectiles_1.length; _i++) {
+            var projectile = projectiles_1[_i];
+            _loop_1(projectile);
+        }
+        for (var _a = 0, aliens_1 = aliens; _a < aliens_1.length; _a++) {
+            var alien = aliens_1[_a];
             alien.render(p);
         }
     };
-    var createAliens = function (rows, columns) {
+    var createAliens = function (columns, rows) {
         var parts = {
-            x: p.windowWidth / rows,
-            y: p.windowHeight / columns
+            x: p.windowWidth / columns,
+            y: p.windowHeight / rows
         };
-        console.log(p.windowWidth / 2);
-        for (var i = 0; i < rows; i++) {
-            for (var j = 0; j < columns; j++) {
+        for (var i = 0; i < columns; i++) {
+            for (var j = 0; j < rows; j++) {
                 var actualX = parts.x * i;
                 var actualY = parts.y * j;
-                aliens.push(new Alien(p, actualX, actualY, 10, 100));
+                aliens.push(new Alien(p, actualX, actualY, { x: 10, y: 20 }, 100));
             }
         }
         return aliens;
@@ -82,7 +99,7 @@ var Character = (function () {
     Character.prototype.render = function (p) {
         p.push();
         p.fill("white");
-        p.rect(this.position.x, this.position.y, this.size, this.size * 0.66);
+        p.rect(this.position.x, this.position.y, this.size.x, this.size.y * 0.66);
         p.pop();
     };
     Character.prototype.setX = function (x) {
@@ -109,17 +126,39 @@ var Player = (function (_super) {
         _this.speed = speed;
         return _this;
     }
-    Player.prototype.shoot = function () {
-        console.log("I am shooting");
-    };
     return Player;
 }(Character));
 var Projectile = (function () {
-    function Projectile(x, y, speed, color) {
-        render();
-        {
-        }
+    function Projectile(position, speed, direction, size) {
+        this.position = position;
+        this.speed = speed;
+        this.direction = direction;
+        this.size = size;
     }
+    Projectile.prototype.render = function (p) {
+        p.push();
+        p.fill("blue");
+        p.rect(this.position.x, this.position.y, this.size.x, this.size.y);
+        p.pop();
+    };
+    Projectile.prototype.move = function (p) {
+        console.log(this.size.x, " - ", this.size.y);
+        switch (this.direction) {
+            case Direction.UP:
+                this.position.y -= 1 * this.speed;
+                break;
+            case Direction.DOWN:
+                this.position.y += 1 * this.speed;
+                break;
+            case Direction.RIGHT:
+                this.position.x += 1 * this.speed;
+                break;
+            case Direction.LEFT:
+                this.position.x -= 1 * this.speed;
+                break;
+            default:
+        }
+    };
     return Projectile;
 }());
 var adjustPosition = function (p, character) {
@@ -146,25 +185,59 @@ var keys = {
     DOWN_ARROW: 40,
     LEFT_ARROW: 37,
     RIGHT_ARROW: 39,
-    SPACE: 32
+    SPACE: 32,
+    W: 87,
+    A: 65,
+    S: 83,
+    D: 68,
+    I: 73,
+    J: 74,
+    K: 75,
+    L: 76
 };
+var Direction;
+(function (Direction) {
+    Direction[Direction["UP"] = 0] = "UP";
+    Direction[Direction["DOWN"] = 1] = "DOWN";
+    Direction[Direction["LEFT"] = 2] = "LEFT";
+    Direction[Direction["RIGHT"] = 3] = "RIGHT";
+})(Direction || (Direction = {}));
 var handleKeyDown = function (p) {
-    if (p.keyIsDown(keys.UP_ARROW)) {
+    if (p.keyIsDown(keys.W)) {
         player.move.up();
     }
-    if (p.keyIsDown(keys.DOWN_ARROW)) {
+    if (p.keyIsDown(keys.D)) {
         player.move.down();
     }
-    if (p.keyIsDown(keys.RIGHT_ARROW)) {
+    if (p.keyIsDown(keys.D)) {
         player.move.right();
     }
-    if (p.keyIsDown(keys.LEFT_ARROW)) {
+    if (p.keyIsDown(keys.A)) {
         player.move.left();
     }
 };
 var handleKeyPress = function (p) {
-    if (p.keyIsDown(keys.SPACE)) {
-        player.shoot();
+    if (p.keyIsDown(keys.I)) {
+        addPlayerProjectile(Direction.UP);
     }
+    if (p.keyIsDown(keys.K)) {
+        addPlayerProjectile(Direction.DOWN);
+    }
+    if (p.keyIsDown(keys.L)) {
+        addPlayerProjectile(Direction.RIGHT);
+    }
+    if (p.keyIsDown(keys.J)) {
+        addPlayerProjectile(Direction.LEFT);
+    }
+};
+var addPlayerProjectile = function (direction) {
+    var projectile = new Projectile({
+        x: player.position.x,
+        y: player.position.y
+    }, (player.speed * 2), direction, {
+        x: 10,
+        y: 10
+    });
+    projectiles.push(projectile);
 };
 //# sourceMappingURL=build.js.map
