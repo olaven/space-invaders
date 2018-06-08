@@ -30,7 +30,7 @@ const handleKeyDown = (p: p5) => {
     if (p.keyIsDown(keys.W)) {
         player.move.up();
     }
-    if (p.keyIsDown(keys.D)) {
+    if (p.keyIsDown(keys.S)) {
         player.move.down();
     }
     if (p.keyIsDown(keys.D)) {

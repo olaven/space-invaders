@@ -35,10 +35,31 @@ var sketch = function (p) {
             projectile.render(p);
             projectile.move(p);
         }
-        for (var _a = 0, aliens_1 = aliens; _a < aliens_1.length; _a++) {
-            var alien = aliens_1[_a];
+        var _loop_1 = function (alien) {
             cleanFromArray(alien, aliens, p);
             alien.render(p);
+            projectiles.map(function (projectile) {
+                if (isRectColliding({
+                    left: alien.position.x - alien.size.x,
+                    right: alien.position.x,
+                    top: alien.position.y - alien.size.y,
+                    bottom: alien.position.y
+                }, {
+                    left: projectile.position.x - alien.size.y,
+                    right: projectile.position.x,
+                    top: projectile.position.y - projectile.size.y,
+                    bottom: projectile.position.y
+                })) {
+                    var indexOfProjectile = projectiles.indexOf(projectile);
+                    var indexOfAlien = aliens.indexOf(alien);
+                    projectiles.splice(indexOfProjectile, 1);
+                    aliens.splice(indexOfAlien, 1);
+                }
+            });
+        };
+        for (var _a = 0, aliens_1 = aliens; _a < aliens_1.length; _a++) {
+            var alien = aliens_1[_a];
+            _loop_1(alien);
         }
     };
     var createAliens = function (columns, rows) {
@@ -50,7 +71,7 @@ var sketch = function (p) {
             for (var j = 0; j < rows; j++) {
                 var actualX = parts.x * i;
                 var actualY = parts.y * j;
-                aliens.push(new Alien(p, { x: actualX, y: actualY }, { x: 10, y: 15 }, 100));
+                aliens.push(new Alien(p, { x: actualX, y: actualY }, { x: 30, y: 45 }, 100));
             }
         }
         return aliens;
@@ -196,7 +217,7 @@ var handleKeyDown = function (p) {
     if (p.keyIsDown(keys.W)) {
         player.move.up();
     }
-    if (p.keyIsDown(keys.D)) {
+    if (p.keyIsDown(keys.S)) {
         player.move.down();
     }
     if (p.keyIsDown(keys.D)) {

@@ -36,14 +36,39 @@ const sketch = (p: p5) => {
             cleanFromArray(projectile, projectiles, p); 
             projectile.render(p);
             projectile.move(p);
+
         }
 
         for(let alien of aliens)
         {
             cleanFromArray(alien, aliens, p); 
-            alien.render(p); 
-        }
+            alien.render(p);
 
+            projectiles.map(projectile => 
+            {
+                if(isRectColliding(
+                    {
+                        left: alien.position.x - alien.size.x,
+                        right: alien.position.x, 
+                        top  : alien.position.y - alien.size.y, 
+                        bottom : alien.position.y
+                    },
+                    {
+                        left : projectile.position.x - alien.size.y,
+                        right: projectile.position.x, 
+                        top  : projectile.position.y - projectile.size.y,
+                        bottom : projectile.position.y
+                    }
+                ))
+                {
+                    // do womething
+                    const indexOfProjectile = projectiles.indexOf(projectile); 
+                    const indexOfAlien = aliens.indexOf(alien);  
+                    projectiles.splice(indexOfProjectile, 1); 
+                    aliens.splice(indexOfAlien, 1); 
+                }
+            }
+        }
     }
 
     /**
@@ -68,7 +93,7 @@ const sketch = (p: p5) => {
                 let actualX = parts.x * i;  
                 let actualY = parts.y * j; 
                 
-                aliens.push(new Alien(p, {x : actualX, y: actualY}, {x : 10, y:15}, 100));
+                aliens.push(new Alien(p, {x : actualX, y: actualY}, {x : 30, y:45}, 100));
             }
         }
         return aliens; 
