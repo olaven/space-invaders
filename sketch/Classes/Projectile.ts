@@ -23,7 +23,7 @@ class Projectile implements HasSize
     render(p : p5) 
     {
         p.push(); 
-        p.fill("blue"); 
+        p.fill("orange"); 
         p.rect(this.position.x, this.position.y, this.size.x, this.size.y);
         p.pop(); 
     }

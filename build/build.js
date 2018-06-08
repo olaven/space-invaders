@@ -14,7 +14,7 @@ var projectiles = [];
 var sketch = function (p) {
     p.setup = function () {
         p.createCanvas(p.windowWidth, p.windowHeight);
-        player = new Player(p, { x: 200, y: 200 }, { x: 40, y: 30 }, 5);
+        player = new Player(p, { x: 200, y: 200 }, { x: 10, y: 10 }, 5, "DeepPink");
         aliens = createAliens(20, 5);
     };
     p.windowResized = function () {
@@ -23,7 +23,7 @@ var sketch = function (p) {
         aliens.forEach(function (alien) { adjustPosition(p, alien); });
     };
     p.draw = function () {
-        p.background(150, 100, 200);
+        p.background("Navy");
         handleKeyDown(p);
         p.keyPressed = function () {
             handleKeyPress(p);
@@ -79,7 +79,7 @@ var sketch = function (p) {
 };
 var sketchP = new p5(sketch);
 var Character = (function () {
-    function Character(p, position, size, speed) {
+    function Character(p, position, size, speed, color) {
         var _this = this;
         this.move = {
             up: function () {
@@ -97,6 +97,7 @@ var Character = (function () {
         };
         this.size = size;
         this.speed = speed;
+        this.color = color;
         this.position = position;
         this.screenSize = {
             x: p.windowWidth,
@@ -105,7 +106,7 @@ var Character = (function () {
     }
     Character.prototype.render = function (p) {
         p.push();
-        p.fill("white");
+        p.fill((this.color ? this.color : "white"));
         p.rect(this.position.x, this.position.y, this.size.x, this.size.y * 0.66);
         p.pop();
     };
@@ -128,8 +129,8 @@ var Alien = (function (_super) {
 }(Character));
 var Player = (function (_super) {
     __extends(Player, _super);
-    function Player(p, position, size, speed) {
-        var _this = _super.call(this, p, position, size, speed) || this;
+    function Player(p, position, size, speed, color) {
+        var _this = _super.call(this, p, position, size, speed, color) || this;
         _this.speed = speed;
         return _this;
     }
@@ -144,7 +145,7 @@ var Projectile = (function () {
     }
     Projectile.prototype.render = function (p) {
         p.push();
-        p.fill("blue");
+        p.fill("orange");
         p.rect(this.position.x, this.position.y, this.size.x, this.size.y);
         p.pop();
     };

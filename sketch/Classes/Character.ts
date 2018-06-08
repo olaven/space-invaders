@@ -6,7 +6,8 @@ abstract class Character implements CanMove, HasSize{
     public position: ElementPosition; 
     public screenSize : {x : number, y : number}; // the screen size that the Character relates to. Used for adjustments
     public size : Size; 
-    public speed: number;
+    public speed : number;
+    public color : string; 
     /**
      *  Methods for moving the character 
      */
@@ -26,9 +27,10 @@ abstract class Character implements CanMove, HasSize{
             }
         }
 
-    constructor(p : p5, position : ElementPosition, size : Size, speed : number) {
+    constructor(p : p5, position : ElementPosition, size : Size, speed : number, color? : string) {
         this.size = size;
         this.speed = speed; 
+        this.color = color; 
         this.position = position; 
         this.screenSize = {
             x : p.windowWidth, 
@@ -43,8 +45,8 @@ abstract class Character implements CanMove, HasSize{
      */
     render(p : p5) {
         p.push();
-
-        p.fill("white")
+        
+        p.fill((this.color ? this.color : "white")); 
         p.rect(this.position.x, this.position.y, this.size.x, this.size.y * 0.66);
 
         p.pop();

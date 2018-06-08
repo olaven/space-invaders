@@ -8,7 +8,7 @@ const sketch = (p: p5) => {
     p.setup = () => {
         p.createCanvas(p.windowWidth, p.windowHeight);
 
-        player = new Player(p, {x : 200, y : 200}, {x : 40, y : 30}, 5); 
+        player = new Player(p, {x : 200, y : 200}, {x : 10, y : 10}, 5, "DeepPink"); 
         aliens = createAliens(20, 5); 
     }
     
@@ -22,7 +22,7 @@ const sketch = (p: p5) => {
     
     // DRAWING 
     p.draw = () => {
-        p.background(150, 100, 200);
+        p.background("Navy");
 
 
         handleKeyDown(p);

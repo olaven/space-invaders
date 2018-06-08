@@ -1,7 +1,7 @@
 class Player extends Character{
 
-    constructor(p: p5, position : ElementPosition, size: Size, speed: number) {
-        super(p, position, size, speed);
+    constructor(p: p5, position : ElementPosition, size: Size, speed: number, color? : string) {
+        super(p, position, size, speed, color);
         this.speed = speed; 
     }
 
