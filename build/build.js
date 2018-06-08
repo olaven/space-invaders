@@ -56,6 +56,23 @@ var sketch = function (p) {
                     aliens.splice(indexOfAlien, 1);
                 }
             });
+            if (p.frameCount % 120 === 0) {
+                var num = p.floor(p.random(1, 5));
+                switch (num) {
+                    case 1:
+                        alien.move.up();
+                        break;
+                    case 2:
+                        alien.move.down();
+                        break;
+                    case 3:
+                        alien.move.right();
+                        break;
+                    case 4:
+                        alien.move.left();
+                        break;
+                }
+            }
         };
         for (var _a = 0, aliens_1 = aliens; _a < aliens_1.length; _a++) {
             var alien = aliens_1[_a];

@@ -44,6 +44,7 @@ const sketch = (p: p5) => {
             cleanFromArray(alien, aliens, p); 
             alien.render(p);
 
+            // check if they are hit 
             projectiles.map(projectile => 
             {
                 if(isRectColliding(
@@ -66,6 +67,25 @@ const sketch = (p: p5) => {
                     const indexOfAlien = aliens.indexOf(alien);  
                     projectiles.splice(indexOfProjectile, 1); 
                     aliens.splice(indexOfAlien, 1); 
+                }
+            }
+            // move them 
+            if(p.frameCount % 120 === 0)
+            {
+                const num = p.floor(p.random(1, 5));
+                switch (num) {
+                    case 1:
+                        alien.move.up();
+                        break;
+                    case 2:
+                        alien.move.down();
+                        break;
+                    case 3:
+                        alien.move.right();
+                        break;
+                    case 4:
+                        alien.move.left();
+                        break;
                 }
             }
         }
